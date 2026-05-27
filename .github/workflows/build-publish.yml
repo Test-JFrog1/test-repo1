@@ -1,9 +1,10 @@
 name: test-oidc-integration
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [opened, synchronize, reopened]
 
 permissions:
   id-token: write # Strictly required for creating the OIDC token
@@ -19,14 +20,13 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
-          # Note: Removed the trailing slash from the URL to prevent potential CLI routing issues
+          # Using the secret directly; ensure the secret itself doesn't have a trailing slash
           JF_URL: https://${{ secrets.JF_URL }}
           JF_PROJECT: ${{ secrets.JF_PROJECT }}
         with:
-          # Matches the provider name currently in your file
           oidc-provider-name: soumilv-oidc-integration
 
       - name: Test JFrog Connection
         run: |
-          echo "Testing OIDC connection to JFrog..."
+          echo "Testing OIDC connection to JFrog for Pull Request..."
           jf rt ping
