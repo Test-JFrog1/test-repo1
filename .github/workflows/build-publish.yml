@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-permissions:
+permissions: 
   id-token: write # Strictly required for creating the OIDC token
   contents: read  # Required for checking out the repository
 
